@@ -1,8 +1,8 @@
 package util.NN;
 
-public class ActivationFunctions {
+public class ActivationFunctions extends DerivativesOfActivationFunctions{
     public double sigmoid(double x){
-        return 1/ 1 + Math.exp(-x);
+        return 1 / (1 + Math.exp(-x));
     }
 
     public double tahn(double x){

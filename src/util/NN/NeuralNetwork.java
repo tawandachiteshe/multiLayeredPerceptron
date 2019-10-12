@@ -53,8 +53,9 @@ public class NeuralNetwork {
         outputs.map(new ActivationFunctions());
         matrix pm = matrix.fromArray(p);
         matrix outputErrors = matrix.subtract(pm,outputs);
+        matrix ouT = matrix.transpose(outputErrors);
         matrix gradients = matrix.map(outputs,new ActivationFunctions());
-        gradients.multiply(outputErrors);
+        gradients.multiply(ouT);
         gradients.multiply(learningRate);
         matrix hiddenTranspose = matrix.transpose(hidden);
         matrix weightsHiddenOutputDeltas = matrix.multiply(gradients,hiddenTranspose);
@@ -62,8 +63,9 @@ public class NeuralNetwork {
         biasOutput.add(gradients);
         matrix weightHiddenTranspose = matrix.transpose(weightsHiddenToOutput);
         matrix hiddenErrors = matrix.multiply(weightHiddenTranspose,outputErrors);
+        matrix hout = matrix.transpose(hiddenErrors);
         matrix hiddenGradient = matrix.map(hidden,new ActivationFunctions());
-        hiddenGradient.multiply(hiddenErrors);
+        hiddenGradient.multiply(hout);
         hiddenGradient.multiply(learningRate);
         matrix inputTranspose = matrix.transpose(input);
         matrix inputToHiddenDeltas = matrix.multiply(hiddenGradient,inputTranspose);

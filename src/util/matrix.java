@@ -28,7 +28,7 @@ public class matrix {
         for(int i = 0; i < num_rows; i++) {
 
             for(int j = 0; j < num_cols; j++) {
-                data[i][j] += Math.random() * 2 - 1;
+                data[i][j] += Math.round(Math.random() * 10 + 1);
             }
         }
     }
@@ -56,19 +56,20 @@ public class matrix {
     }
 
     public void multiply(matrix a) throws MatrixCalculationException {
-        if(a.getNum_cols() != this.num_rows){
+        if(this.num_cols != a.getNum_rows()){
             throw new MatrixCalculationException("please make sure rows are equal to column");
         }else {
-            double tempArray[][] = a.getData();
-            double bTemp[][] =  this.data;
-            double tempData[][] = new double[a.getNum_rows()][this.num_cols];
-            for(int i = 0; i < a.getNum_rows(); i++) {
-                for(int j = 0; j < num_cols; j++) {
-                    for(int k = 0 ; k < a.getNum_cols(); k++){
+            double tempArray[][] = this.data;
+            double bTemp[][] = a.getData();
+            double tempData[][] = new double[this.num_rows][a.getNum_cols()];
+            for(int i = 0; i < this.num_rows; i++) {
+                for(int j = 0; j < a.getNum_cols(); j++) {
+                    for(int k = 0 ; k < this.num_cols; k++){
                         tempData[i][j] += tempArray[i][k] * bTemp[k][j];
                     }
                 }
             }
+          this.data = tempData;
         }
     }
 
@@ -104,14 +105,25 @@ public class matrix {
 
     public static matrix map(matrix m , ActivationFunctions af){
         matrix tempM = new matrix(m.getNum_rows(),m.getNum_cols());
-        double mData[][] = m.getData();
-        for (int i = 0; i < m.getNum_rows() ; i++) {
-            for (int j = 0; j < m.getNum_cols(); j++) {
-                mData[i][j] = af.sigmoid(mData[i][j]);
-                tempM.setData(mData);
-            }
-        }
-        return tempM;
+      if(af instanceof ActivationFunctions){
+          double mData[][] = m.getData();
+          for (int i = 0; i < m.getNum_rows() ; i++) {
+              for (int j = 0; j < m.getNum_cols(); j++) {
+                  mData[i][j] = af.sigmoid(mData[i][j]);
+                  tempM.setData(mData);
+              }
+          }
+          return tempM;
+      }else {
+          double mData[][] = m.getData();
+          for (int i = 0; i < m.getNum_rows() ; i++) {
+              for (int j = 0; j < m.getNum_cols(); j++) {
+                  mData[i][j] = af.dSigmoid(mData[i][j]);
+                  tempM.setData(mData);
+              }
+          }
+          return tempM;
+      }
     }
 
     public static matrix fromArray(double array[]) {
