@@ -7,6 +7,7 @@ package util;
 
 
 import util.NN.ActivationFunctions;
+import util.NN.ActivationFunctionsTypes;
 
 import java.util.Random;
 
@@ -28,7 +29,7 @@ public class matrix {
         for(int i = 0; i < num_rows; i++) {
 
             for(int j = 0; j < num_cols; j++) {
-                data[i][j] += Math.round(Math.random() * 10 + 1);
+                data[i][j] += Math.random() * 2 - 1;
             }
         }
     }
@@ -54,6 +55,8 @@ public class matrix {
 
 
     }
+
+
 
     public void multiply(matrix a) throws MatrixCalculationException {
         if(this.num_cols != a.getNum_rows()){
@@ -103,9 +106,9 @@ public class matrix {
         }
     }
 
-    public static matrix map(matrix m , ActivationFunctions af){
+    public static matrix map(matrix m , ActivationFunctions af, ActivationFunctionsTypes types){
         matrix tempM = new matrix(m.getNum_rows(),m.getNum_cols());
-      if(af instanceof ActivationFunctions){
+      if(af instanceof ActivationFunctions ){
           double mData[][] = m.getData();
           for (int i = 0; i < m.getNum_rows() ; i++) {
               for (int j = 0; j < m.getNum_cols(); j++) {
@@ -114,7 +117,8 @@ public class matrix {
               }
           }
           return tempM;
-      }else {
+      }
+      if(types.equals(ActivationFunctionsTypes.DSIGMOID)){
           double mData[][] = m.getData();
           for (int i = 0; i < m.getNum_rows() ; i++) {
               for (int j = 0; j < m.getNum_cols(); j++) {
@@ -124,8 +128,30 @@ public class matrix {
           }
           return tempM;
       }
+      return null;
     }
+    public static double[] toArray(matrix a){
+        int rows = a.getNum_rows();
+        int cols = a.getNum_cols();
+        double tempArray[] = null;
+        if(cols == 1){
+            tempArray = new double[rows];
+        }else
+        {
+            tempArray = new double[rows + cols];
 
+        }
+        double[][] matrixData = a.getData();
+        for (int i = 0; i < rows ; i++) {
+            for (int j = 0; j < cols ; j++) {
+                for (int k = 0; k < tempArray.length ; k++) {
+                    tempArray[k] = matrixData[i][j];
+                }
+            }
+        }
+        return  tempArray;
+
+    }
     public static matrix fromArray(double array[]) {
         matrix fromArrayTemp = new matrix(array.length,1);
         double[][] tempArray = new double[array.length][1];
