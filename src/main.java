@@ -1,5 +1,7 @@
 
 import util.*;
+import util.NN.ActivationFunctions;
+import util.NN.NeuralNetwork;
 
 import java.util.Arrays;
 
@@ -7,14 +9,8 @@ public class main {
     public static void main(String[] args) throws MatrixCalculationException {
         matrix a = new matrix(2,3);
         matrix b = new matrix(2,3);
-        double[] temp = {3,4,1};
-        a.randomize();
-        b.randomize();
-        System.out.println("matrrix a");
-        System.out.println(Arrays.deepToString(a.getData()));
-        matrix s = matrix.fromArray(temp);
-        System.out.println("array");
+        NeuralNetwork nn = new NeuralNetwork(2,4,3);
+        matrix s = nn.predict(new double[]{3,2});
         System.out.println(Arrays.deepToString(s.getData()));
-
     }
 }
